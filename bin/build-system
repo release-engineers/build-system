@@ -4,6 +4,7 @@
 #  build-system [command]
 #
 BUILD_SYSTEM_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "BUILD_SYSTEM_HOME: ${BUILD_SYSTEM_HOME}"
 
 # expand path with build-system subcommands
 path_extension=$(find "${BUILD_SYSTEM_HOME}" -type d -depth 1 | tr '\n' ':')
@@ -15,9 +16,9 @@ if [ -z "${command}" ]; then
   exit 1
 fi
 
-shift
 if [ -f "${BUILD_SYSTEM_HOME}/${command}/${command}" ]; then
   printf -- "-- \033[0;36m[system] command: %s\033[0m\n" "${command}"
+  shift
   "${BUILD_SYSTEM_HOME}/${command}/${command}" "$@"
 else
   printf -- "-- \033[0;31m[system]no command found for '%s'\033[0m\n" "${command}"
