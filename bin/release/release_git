@@ -2,16 +2,16 @@
 set -e
 set -o pipefail
 
-version_patch=$(release_version)
-if [ -n "$(git tag --list "v${version_patch}")" ]; then
-  printf -- "-- \033[0;36m[poetry] git tag v%s already exists.\033[0m\n" "${version_patch}"
+version=$(release_version)
+if [ -n "$(git tag --list "v${version}")" ]; then
+  printf -- "-- \033[0;36m[poetry] git tag v%s already exists.\033[0m\n" "${version}"
   exit 0
 fi
 
-version_minor=$(echo "${version_patch}" | cut -d'.' -f2)
-version_major=$(echo "${version_patch}" | cut -d'.' -f1)
+version_minor=$(echo "${version}" | cut -d'.' -f2)
+version_major=$(echo "${version}" | cut -d'.' -f1)
 
-git tag "v${version_patch}"
-git tag --force "v${version_minor}"
+git tag "v${version}"
+git tag --force "v${version_major}.${version_minor}"
 git tag --force "v${version_major}"
 git push --tags
