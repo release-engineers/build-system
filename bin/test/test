@@ -5,11 +5,13 @@
 set -e
 set -o pipefail
 
-exit_code=1
+test_match=0
 
 if [ -f pyproject.toml ]; then
   test_poetry "$@"
-  exit_code=0
+  test_match=1
 fi
 
-exit "${exit_code}"
+if [ "${test_match}" -eq 0 ]; then
+  printf -- "-- \033[0;36m[system] nothing to test\033[0m\n"
+fi
