@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+exit_code=1
+
+if [ -z "${CI}" ]; then
+  printf -- "-- \033[0;31m[system] not running in CI\033[0m\n"
+  printf -- "-- \033[0;31m[system] Are you sure you want to release? [y/N]\033[0m"
+  read -r -p " " response
+  if ! [[ "${response}" =~ ^([yY])$ ]]; then
+    exit 0
+  fi
+fi
+
+if [ -f pyproject.toml ]; then
+  release_poetry "$@"
+  exit_code=0
+fi
+
+if [ -f Dockerfile ]; then
+  release_docker "$@"
+  exit_code=0
+fi
+
+if [ -d .git ]; then
+  release_git "$@"
+  exit_code=0
+fi
+
+if [ "${exit_code}" -eq 1 ]; then
+  printf -- "-- \033[0;31m[system] no known way to run 'release' for this type of project\033[0m\n"
+fi
+exit "${exit_code}"

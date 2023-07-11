@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+if [ -f pyproject.toml ]; then
+  run_poetry "$@"
+  exit 0
+fi
+
+if [ -f Dockerfile ]; then
+  run_docker "$@"
+  exit 0
+fi
+
+exit 1

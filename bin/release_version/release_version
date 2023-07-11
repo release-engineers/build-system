@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+if [ -d .git ]; then
+  release_version_git "$@"
+  exit 0
+fi
+
+if [ -f pyproject.toml ]; then
+  release_version_poetry "$@"
+  exit 0
+fi
+
+printf -- "-- \033[0;31m[system] no known way to run 'release_version' for this type of project\033[0m\n"
+exit 1

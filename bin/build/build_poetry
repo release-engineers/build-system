@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+poetry lock
+poetry install --sync
+rm -rf dist/*.whl
+poetry build --format wheel

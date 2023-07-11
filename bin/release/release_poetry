@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+version=$(release_version)
+if [ "$(poetry version --short)" != "${version}" ]; then
+  poetry version "${version}"
+  tag="v${version}"
+  git add pyproject.toml
+  if git commit --no-verify --all --message "Release ${version}"; then
+    git tag "${tag}"
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    git push --atomic origin "${branch}" "v${version}"
+  fi
+fi
+
+if [ -z "${PYPI_TOKEN}" ]; then
+  printf -- "-- \033[0;36m[poetry] PYPI_TOKEN not set, skipping release\033[0m\n"
+  exit 0
+fi
+
+poetry config pypi-token.pypi "${PYPI_TOKEN}"
+poetry publish

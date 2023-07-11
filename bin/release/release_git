@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+version_patch=$(release_version)
+if [ -n "$(git tag --list "v${version_patch}")" ]; then
+  echo "git tag v${version_patch} already exists."
+  exit 0
+fi
+
+version_minor=$(echo "${version_patch}" | cut -d'.' -f2)
+version_major=$(echo "${version_patch}" | cut -d'.' -f1)
+
+git tag "v${version_patch}"
+git tag --force "v${version_minor}"
+git tag --force "v${version_major}"
+git push --tags

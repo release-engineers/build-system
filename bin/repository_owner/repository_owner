@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+if [ -d .git ]; then
+  repository_owner_git "$@"
+  exit 0
+fi
+
+printf -- "-- \033[0;31m[system] no known way to run 'repository_owner' for this type of project\033[0m\n"
+exit 1

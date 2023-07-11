@@ -1,0 +1,8 @@
+name: 'Build System'
+description: 'Adds build-system commands to the PATH.'
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        echo "$GITHUB_ACTION_PATH/bin" >> "$GITHUB_PATH"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+exit_code=1
+
+if [ -f pyproject.toml ]; then
+  build_poetry "$@"
+  exit_code=0
+fi
+
+if [ -f Dockerfile ]; then
+  build_docker "$@"
+  exit_code=0
+fi
+
+if [ "${exit_code}" -eq 1 ]; then
+  printf -- "-- \033[0;31m[system] no known way to run 'build' for this type of project\033[0m\n"
+fi
+exit "${exit_code}"

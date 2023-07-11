@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# Prints "local"
+#
+set -e
+set -o pipefail
+
+echo local

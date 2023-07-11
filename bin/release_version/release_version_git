@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Prints the release version expected for the most recent commit.
+# This can be an existing version (most recent version tag) or a new version (most recent tag incremented by one, or "0.0.0").
+# Version increments occur based on indicators to bump major ("feat!", "fix!"), minor ("feat"), or patch (any other commit).
+#
+# Version tags must follow the format "^v[0-9]+\.[0-9]+\.[0-9]+$".
+#
+set -e
+set -o pipefail
+
+latest=$(git tag --sort='-committerdate' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+if [[ -z "${latest}" ]]; then
+  echo "0.0.0"
+  exit 0
+fi
+
+latest_version=$(echo "${latest}" | cut -d'v' -f2)
+latest_major=$(echo "${latest_version}" | cut -d'.' -f1)
+latest_minor=$(echo "${latest_version}" | cut -d'.' -f2)
+latest_patch=$(echo "${latest_version}" | cut -d'.' -f3)
+
+range_commits="$(git rev-parse "${latest}")..$(git rev-parse HEAD)"
+range_messages="$(git log --pretty=format:%s "${range_commits}")"
+range_messages_major=$(echo "${range_messages}" | grep -c -E '^(feat|fix)!' || true)
+range_messages_minor=$(echo "${range_messages}" | grep -c -E '^(feat)' || true)
+range_messages_patch=$(echo "${range_messages}" | grep -c -E '^.+' || true)
+
+if [[ "${range_messages_major}" -gt 0 ]]; then
+  echo "$((latest_major + 1)).0.0"
+elif [[ "${range_messages_minor}" -gt 0 ]]; then
+  echo "${latest_major}.$((latest_minor + 1)).0"
+elif [[ "${range_messages_patch}" -gt 0 ]]; then
+  echo "${latest_major}.${latest_minor}.$((latest_patch + 1))"
+else
+  echo "${latest_version}"
+fi

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+build_tag="$(repository_owner)/$(repository_name):$(build_id)"
+if ! docker image inspect "${build_tag}" &> /dev/null; then
+  printf -- "-- \033[0;31m[docker] image '%s' expected from build not found\033[0m\n" "${build_tag}"
+  exit 1
+fi
+
+if [ -z "${GITHUB_TOKEN}" ]; then
+  printf -- "-- \033[0;36m[poetry] GITHUB_TOKEN not set, skipping release\033[0m\n"
+  exit 0
+fi
+
+release_tag="ghcr.io/$(repository_owner)/$(repository_name):$(release_version)"
+printf -- "-- \033[0;36m[docker] releasing '%s'\033[0m\n" "${release_tag}"
+
+echo "${GITHUB_TOKEN}" | docker login ghcr.io --username "$(repository_owner)" --password-stdin
+docker tag "${build_tag}" "${release_tag}"
+docker push "${release_tag}"

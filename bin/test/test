@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+exit_code=1
+
+if [ -f pyproject.toml ]; then
+  test_poetry "$@"
+  exit_code=0
+fi
+
+exit "${exit_code}"

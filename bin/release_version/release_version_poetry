@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# Prints the configured Poetry version.
+#
+set -e
+set -o pipefail
+
+poetry version --short

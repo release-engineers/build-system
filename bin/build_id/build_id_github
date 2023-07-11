@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Prints the GitHub workflow run identifier.
+#
+set -e
+set -o pipefail
+
+echo "${GITHUB_RUN_ID}"
+

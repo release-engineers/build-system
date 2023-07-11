@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# Prints the Git remote's repository name, assuming it can be found on remote origin and ends in "<name>.git".
+#
+set -e
+set -o pipefail
+
+origin_url=$(git remote get-url origin)
+origin_no_dot_git=${origin_url%.git}
+origin_owner_url=$(dirname "${origin_no_dot_git}")
+origin_owner=$(basename "${origin_owner_url}")
+
+echo "${origin_owner}"
