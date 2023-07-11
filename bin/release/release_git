@@ -4,7 +4,7 @@ set -o pipefail
 
 version_patch=$(release_version)
 if [ -n "$(git tag --list "v${version_patch}")" ]; then
-  echo "git tag v${version_patch} already exists."
+  printf -- "-- \033[0;36m[poetry] git tag v%s already exists.\033[0m\n" "${version_patch}"
   exit 0
 fi
 
