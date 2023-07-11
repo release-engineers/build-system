@@ -14,4 +14,4 @@ version_major=$(echo "${version}" | cut -d'.' -f1)
 git tag "v${version}"
 git tag --force "v${version_major}.${version_minor}"
 git tag --force "v${version_major}"
-git push --tags
+git push --tags --force
