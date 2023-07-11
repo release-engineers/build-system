@@ -5,4 +5,4 @@ runs:
   steps:
     - shell: bash
       run: |
-        echo "$GITHUB_ACTION_PATH/bin" | tee -a "$GITHUB_PATH"
+        echo "$GITHUB_ACTION_PATH/bin" >> "$GITHUB_PATH"

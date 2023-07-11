@@ -4,7 +4,6 @@
 #  build-system [command]
 #
 BUILD_SYSTEM_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "BUILD_SYSTEM_HOME: ${BUILD_SYSTEM_HOME}"
 
 # expand path with build-system subcommands
 path_extension=$(find "${BUILD_SYSTEM_HOME}" -type d -maxdepth 1 | tr '\n' ':')
