@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+version=$(release_version)
+if [ "$(poetry version --short)" == "${version}" ]; then
+  printf -- "-- \033[0;36m[poetry] version already set to %s\033[0m\n" "${version}"
+  exit 0
+fi
+
+poetry version "${version}"
+git add pyproject.toml
+git commit --no-verify --all --message "Release ${version}"

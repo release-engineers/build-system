@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Run from the root of your project to detect applicable scripts.
+#
+set -e
+set -o pipefail
+
+if [ -f pyproject.toml ]; then
+  increment_poetry "$@"
+fi

@@ -8,10 +8,11 @@ if [ -n "$(git tag --list "v${version}")" ]; then
   exit 0
 fi
 
+git tag "v${version}"
+git push --tags
+
 version_minor=$(echo "${version}" | cut -d'.' -f2)
 version_major=$(echo "${version}" | cut -d'.' -f1)
-
-git tag "v${version}"
 git tag --force "v${version_major}.${version_minor}"
 git tag --force "v${version_major}"
-git push --tags --force
+git push --force --tags
