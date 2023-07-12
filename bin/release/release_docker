@@ -2,9 +2,9 @@
 set -e
 set -o pipefail
 
-build_tag="$(repository_owner)/$(repository_name):build"
-if ! docker image inspect "${build_tag}" &> /dev/null; then
-  printf -- "-- \033[0;31m[docker] image '%s' expected from build not found\033[0m\n" "${build_tag}"
+tag_build="$(repository_owner)/$(repository_name):build"
+if ! docker image inspect "${tag_build}" &> /dev/null; then
+  printf -- "-- \033[0;31m[docker] image '%s' expected from build not found\033[0m\n" "${tag_build}"
   exit 1
 fi
 
@@ -13,9 +13,13 @@ if [ -z "${GITHUB_TOKEN}" ]; then
   exit 0
 fi
 
-release_tag="ghcr.io/$(repository_owner)/$(repository_name):$(release_version)"
-printf -- "-- \033[0;36m[docker] releasing '%s'\033[0m\n" "${release_tag}"
+tag_release="ghcr.io/$(repository_owner)/$(repository_name):$(release_version)"
+tag_latest="ghcr.io/$(repository_owner)/$(repository_name):latest"
+
+printf -- "-- \033[0;36m[docker] releasing '%s'\033[0m\n" "${tag_release}"
 
 echo "${GITHUB_TOKEN}" | docker login ghcr.io --username "$(repository_owner)" --password-stdin
-docker tag "${build_tag}" "${release_tag}"
-docker push "${release_tag}"
+docker tag "${tag_build}" "${tag_release}"
+docker tag "${tag_build}" "${tag_latest}"
+docker push "${tag_release}"
+docker push "${tag_latest}"
