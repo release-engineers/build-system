@@ -4,7 +4,7 @@ set -o pipefail
 
 version=$(release_version)
 if [ -n "$(git tag --list "v${version}")" ]; then
-  printf -- "-- \033[0;36m[poetry] git tag v%s already exists.\033[0m\n" "${version}"
+  printf -- "-- \033[0;36m[git] git tag v%s already exists.\033[0m\n" "${version}"
   exit 0
 fi
 

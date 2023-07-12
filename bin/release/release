@@ -31,6 +31,11 @@ if [ -d .git ]; then
   release_match=1
 fi
 
+if [ -f action.yml ]; then
+  release_git_floating_tags "$@"
+  release_match=1
+fi
+
 if [ "${release_match}" -eq 0 ]; then
   printf -- "-- \033[0;36m[system] nothing to release\033[0m\n"
 fi

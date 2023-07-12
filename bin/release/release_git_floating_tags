@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Ensures major and minor floating tags are pointing to the latest release tag.
+#
+set -e
+set -o pipefail
+
+version=$(release_version)
+version_tag="v${version}"
+version_major=$(echo "${version}" | cut -d'.' -f1)
+version_minor=$(echo "${version}" | cut -d'.' -f2)
+version_tag_major_floating="v${version_major}"
+version_tag_minor_floating="v${version_major}.${version_minor}"
+tagged=0
+
+if [ "$(git rev-parse "${version_tag_major_floating}")" != "$(git rev-parse "${version_tag}")" ]; then
+  printf -- "-- \033[0;36m[git] updating floating major tag v%s to v%s.\033[0m\n" "${version_major}" "${version}"
+  git tag --force "${version_tag_major_floating}"
+  tagged=1
+fi
+
+if [ "$(git rev-parse "${version_tag_minor_floating}")" != "$(git rev-parse "${version_tag}")" ]; then
+  printf -- "-- \033[0;36m[git] updating floating minor tag v%s to v%s.\033[0m\n" "${version_major}.${version_minor}" "${version}"
+  git tag --force "${version_tag_minor_floating}"
+  tagged=1
+fi
+
+if [ "${tagged}" == "1" ]; then
+  git push --force --tags
+fi
