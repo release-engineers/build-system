@@ -6,7 +6,6 @@
 
 A tool which automatically detects a Release Engineers project's setup and builds it.
 
-
 ## Usage
 
 build-system is a GitHub Action
