@@ -13,9 +13,3 @@ git tag "v${version}"
 # push both any open changes from potential increment along with the new tag
 branch=$(git rev-parse --abbrev-ref HEAD)
 git push --atomic origin "${branch}" "v${version}" --tags
-
-version_minor=$(echo "${version}" | cut -d'.' -f2)
-version_major=$(echo "${version}" | cut -d'.' -f1)
-git tag --force "v${version_major}.${version_minor}"
-git tag --force "v${version_major}"
-git push --force --tags
