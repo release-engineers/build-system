@@ -17,6 +17,11 @@ if [ -f Dockerfile ]; then
   build_match=1
 fi
 
+if [ -f .github/custom/build.sh ]; then
+  build_custom "$@"
+  build_match=1
+fi
+
 if [ "${build_match}" -eq 0 ]; then
   printf -- "-- \033[0;36m[system] nothing to build\033[0m\n"
 fi
