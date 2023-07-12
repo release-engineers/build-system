@@ -9,7 +9,10 @@ if [ -n "$(git tag --list "v${version}")" ]; then
 fi
 
 git tag "v${version}"
-git push --tags
+
+# push both any open changes from potential increment along with the new tag
+branch=$(git rev-parse --abbrev-ref HEAD)
+git push --atomic origin "${branch}" "v${version}" --tags
 
 version_minor=$(echo "${version}" | cut -d'.' -f2)
 version_major=$(echo "${version}" | cut -d'.' -f1)
