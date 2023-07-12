@@ -2,4 +2,4 @@
 set -e
 set -o pipefail
 
-docker build --tag "$(repository_owner)/$(repository_name):$(build_id)" --file Dockerfile .
+docker build --tag "$(repository_owner)/$(repository_name):build" --file Dockerfile .
