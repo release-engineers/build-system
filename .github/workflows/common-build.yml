@@ -15,7 +15,7 @@ jobs:
     container: ghcr.io/release-engineers/build-image-poetry:latest
     steps:
       - uses: actions/checkout@v3
-      - uses: release-engineers/build-system@master
+      - uses: release-engineers/build-system@v0
       - shell: bash
         run: |
           git config --global --add safe.directory '*'
