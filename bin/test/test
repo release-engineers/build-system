@@ -12,6 +12,11 @@ if [ -f pyproject.toml ]; then
   test_match=1
 fi
 
+if [ -f .github/custom/test.sh ]; then
+  test_custom "$@"
+  test_match=1
+fi
+
 if [ "${test_match}" -eq 0 ]; then
   printf -- "-- \033[0;36m[system] nothing to test\033[0m\n"
 fi
